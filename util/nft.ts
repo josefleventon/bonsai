@@ -7,7 +7,7 @@ export async function fetchNfts(tokens: Token[]): Promise<NFT[] | null> {
   let data
   try {
     data = tokens.map((nft) => {
-      return getToken(nft.collection, nft.token_id.toString()).then((data) => {
+      return getToken(nft.token_id.toString()).then((data) => {
         return data
       })
     })
