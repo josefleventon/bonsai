@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { StargazeClient } from 'client/core'
 import StargazeContext from './StargazeContext'
 
-import { CONTRACT_ADDRESS, CONTRACT_CODEID, SG721_CODEID } from 'util/constants'
+import { CONTRACT_ADDRESS, SG721_CODEID } from 'util/constants'
 import chainInfo from 'client/ChainInfo'
 import useWallet from '../wallet/useWallet'
 
@@ -22,7 +22,6 @@ export default function StargazeProvider({
         wallet: wallet || null,
         chainInfo,
         tradeContract: CONTRACT_ADDRESS,
-        tradeCodeId: CONTRACT_CODEID,
         signingCosmWasmClient: signingCosmWasmClient || null,
         sg721CodeId: SG721_CODEID,
       }),
