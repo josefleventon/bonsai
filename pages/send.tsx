@@ -37,12 +37,6 @@ export default function Home() {
       CONTRACT_ADDRESS,
     )
 
-    let date = new Date()
-    date.setDate(date.getDate() + 7)
-    let padding = 10 * 60 * 1_000_000 * -1 // -10 minutes (clock drift on chain can be higher)
-
-    let expiresAt = (date.getTime() * 1_000_000 + padding).toString()
-
     let peer
 
     // Get address from name
@@ -72,6 +66,12 @@ export default function Home() {
         })
       }
     }
+
+    let date = new Date()
+    date.setDate(date.getDate() + 7)
+    let padding = 10 * 60 * 1_000_000 * -1 // -10 minutes (clock drift on chain can be higher)
+
+    let expiresAt = (date.getTime() * 1_000_000 + padding).toString()
 
     const msg = messageComposer.createOffer({
       expiresAt,
