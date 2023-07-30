@@ -1,28 +1,28 @@
-import { classNames } from 'util/css'
-import { NFT } from 'client/query'
+import { classNames } from "util/css";
+import { NFT } from "client/query";
 
-import React, { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
-import { useInView } from 'react-intersection-observer'
-import { isIOS } from 'react-device-detect'
+import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { useInView } from "react-intersection-observer";
+import { isIOS } from "react-device-detect";
 
 type MintImageProps = {
-  src?: string
-  inactive?: boolean
-  alt?: string
-}
+  src?: string;
+  inactive?: boolean;
+  alt?: string;
+};
 
 function MediaPlayerLoading() {
   return (
     <div
       className={
-        'w-full h-full bg-neutral-900 z-10 rounded-lg flex justify-center items-center animate-pulse'
+        "w-full h-full bg-neutral-900 z-10 rounded-lg flex justify-center items-center animate-pulse"
       }
       style={{
-        aspectRatio: '1',
+        aspectRatio: "1",
       }}
     />
-  )
+  );
 }
 
 function ImageError() {
@@ -30,7 +30,7 @@ function ImageError() {
     <div className="flex flex-col items-center justify-center w-full text-sm opacity-50 aspect-1 bg-neutral-900 rounded-xl text-neutral-400">
       <div className="mt-4">Error loading image.</div>
     </div>
-  )
+  );
 }
 
 function StaticImage({
@@ -39,18 +39,18 @@ function StaticImage({
   alt,
   onLoad,
 }: MintImageProps & {
-  onLoad?: () => void
+  onLoad?: () => void;
 }) {
-  const [nextImgError, setNextImgError] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [nextImgError, setNextImgError] = useState(false);
+  const [loading, setLoading] = useState(true);
   const imageClassName = classNames(
-    !inactive ? 'opacity-90' : 'opacity-100',
-    'object-cover rounded-lg w-full transition-none',
-  )
+    !inactive ? "opacity-90" : "opacity-100",
+    "object-cover rounded-lg w-full transition-none"
+  );
 
   function handleOnLoad() {
-    onLoad?.()
-    setLoading(false)
+    onLoad?.();
+    setLoading(false);
   }
 
   return (
@@ -71,29 +71,29 @@ function StaticImage({
         onLoadingComplete={handleOnLoad}
       />
     </div>
-  )
+  );
 }
 
 function AnimatedImage({ src, inactive, alt }: MintImageProps) {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const { ref, inView } = useInView({
     /* Optional options */
     threshold: 0.5,
-  })
+  });
 
   const videoRef = useRef<
     HTMLVideoElement | undefined
-  >() as React.MutableRefObject<HTMLVideoElement>
+  >() as React.MutableRefObject<HTMLVideoElement>;
 
   // Play video when in view.
   useEffect(() => {
     if (inView && !isIOS) {
-      videoRef.current?.play()
-      setLoading(false)
+      videoRef.current?.play();
+      setLoading(false);
     } else {
-      videoRef.current?.pause()
+      videoRef.current?.pause();
     }
-  }, [inView])
+  }, [inView]);
 
   return (
     <div ref={ref}>
@@ -116,41 +116,41 @@ function AnimatedImage({ src, inactive, alt }: MintImageProps) {
         />
       </video>
     </div>
-  )
+  );
 }
 
-function RenderMintImage({ src = '', inactive = false, alt }: MintImageProps) {
-  const extension = src.split('.').pop()
+function RenderMintImage({ src = "", inactive = false, alt }: MintImageProps) {
+  const extension = src ? src.split(".").pop() : "";
   const isAnimated =
-    extension === 'gif' ||
-    extension === 'mp4' ||
-    extension === 'webm' ||
-    extension === 'mov' ||
-    extension === 'm4v'
+    extension === "gif" ||
+    extension === "mp4" ||
+    extension === "webm" ||
+    extension === "mov" ||
+    extension === "m4v";
 
   if (isAnimated) {
-    return <AnimatedImage src={src} inactive={inactive} alt={alt} />
+    return <AnimatedImage src={src} inactive={inactive} alt={alt} />;
   } else {
-    return <StaticImage src={src} inactive={inactive} alt={alt} />
+    return <StaticImage src={src} inactive={inactive} alt={alt} />;
   }
 }
 
 export function MintImage(props: MintImageProps) {
-  const { ref, inView } = useInView()
+  const { ref, inView } = useInView();
 
-  const [load, setLoad] = useState(false)
+  const [load, setLoad] = useState(false);
 
   useEffect(() => {
     if (inView) {
-      setLoad(true)
+      setLoad(true);
     }
-  }, [inView])
+  }, [inView]);
 
   return (
     <div ref={ref}>
       {load ? <RenderMintImage {...props} /> : <MediaPlayerLoading />}
     </div>
-  )
+  );
 }
 
 export default function MediaView({
@@ -159,19 +159,19 @@ export default function MediaView({
   selected,
   small,
 }: {
-  nft: NFT
-  onClick: () => void
-  selected: boolean
-  small?: boolean
+  nft: NFT;
+  onClick: () => void;
+  selected: boolean;
+  small?: boolean;
 }) {
   return (
     <a
       onClick={onClick}
       className={classNames(
         selected
-          ? 'ring ring-pink-500'
-          : 'hover:shadow-sm hover:bg-firefly-800',
-        'px-5 py-4 border rounded-lg border-white/10 cursor-pointer grow-0 shrink-0',
+          ? "ring ring-pink-500"
+          : "hover:shadow-sm hover:bg-firefly-800",
+        "px-5 py-4 border rounded-lg border-white/10 cursor-pointer grow-0 shrink-0"
       )}
     >
       {/* <img src={nft.media.image.jpgLink} className={'rounded-md aspect-1'} /> */}
@@ -196,7 +196,7 @@ export default function MediaView({
         </p> */}
       </div>
     </a>
-  )
+  );
 }
 
 export function VerticalMediaView({ nft, href }: { nft: NFT; href: string }) {
@@ -216,5 +216,5 @@ export function VerticalMediaView({ nft, href }: { nft: NFT; href: string }) {
         <p className="text-sm text-white/75">{nft.collection.name}</p>
       </div>
     </a>
-  )
+  );
 }

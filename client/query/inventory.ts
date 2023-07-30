@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
-import { COLLECTION_ADDRESS } from 'util/constants'
-import { client, NFT } from '.'
+import { gql } from "@apollo/client";
+import { COLLECTION_ADDRESS } from "util/constants";
+import { client, NFT } from ".";
 
 export const getInventory = async (address: string) => {
   const { data } = await client.query({
@@ -36,10 +36,12 @@ export const getInventory = async (address: string) => {
       limit: 1000,
       filterByCollectionAddrs: [COLLECTION_ADDRESS],
     },
-  })
+  });
 
-  return data.tokens.tokens as NFT[]
-}
+  console.log(data);
+
+  return data.tokens.tokens as NFT[];
+};
 
 export const getToken = async (tokenId: string) => {
   const { data } = await client.query({
@@ -61,7 +63,7 @@ export const getToken = async (tokenId: string) => {
       }
     `,
     variables: { collectionAddr: COLLECTION_ADDRESS, tokenId },
-  })
+  });
 
-  return data.token as NFT
-}
+  return data.token as NFT;
+};

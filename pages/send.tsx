@@ -1,125 +1,101 @@
-import { useToast } from '@chakra-ui/react'
-import { useStargazeClient, useWallet } from 'client'
-import { getInventory, NFT } from 'client/query'
-import { MediaView, Spinner } from 'components'
-import { useTx } from 'contexts/tx'
-import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
-import { fromBech32, toUtf8 } from 'cosmwasm'
-import useToaster, { ToastTypes } from 'hooks/useToaster'
-import { useRouter } from 'next/router'
-import { useCallback, useEffect, useState } from 'react'
-import { TradeMessageComposer } from 'types/Trade.message-composer'
-import { COLLECTION_ADDRESS, CONTRACT_ADDRESS } from 'util/constants'
+import { useGuard, useStargazeClient, useWallet } from "client";
+import { getInventory, NFT } from "client/query";
+import { MediaView, Spinner } from "components";
+import { useTx } from "contexts/tx";
+import { MsgExecuteContract } from "cosmjs-types/cosmwasm/wasm/v1/tx";
+import { fromBech32, toUtf8 } from "cosmwasm";
+import useToaster, { ToastTypes } from "hooks/useToaster";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
+import { COLLECTION_ADDRESS } from "util/constants";
+import { uuid as uuidv4 } from "uuidv4";
 
 export default function Home() {
-  const { wallet } = useWallet()
-  const { client } = useStargazeClient()
-  const router = useRouter()
+  const { wallet } = useWallet();
+  const { guard } = useGuard();
+  const { client } = useStargazeClient();
+  const router = useRouter();
 
-  const { tx } = useTx()
-  const toaster = useToaster()
+  const { tx } = useTx();
+  const toaster = useToaster();
 
-  const [inventory, setInventory] = useState<NFT[]>()
-  const [selectedNft, setSelectedNft] = useState<string>()
+  const [inventory, setInventory] = useState<NFT[]>();
+  const [selectedNft, setSelectedNft] = useState<string>();
 
   useEffect(() => {
-    if (!wallet) return
-    getInventory(wallet.address).then((inventory) => setInventory(inventory))
-  }, [wallet])
+    if (!wallet) return;
+    getInventory(wallet.address).then((inventory) => setInventory(inventory));
+  }, [wallet]);
 
-  const [recipient, setRecipient] = useState<string>()
-  const [message, setMessage] = useState<string>()
+  const [recipient, setRecipient] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
 
   const handleSend = useCallback(async () => {
-    if (!wallet || !selectedNft || !recipient || !message) return
-    const messageComposer = new TradeMessageComposer(
-      wallet?.address,
-      CONTRACT_ADDRESS,
-    )
+    if (!wallet || !guard || !selectedNft || !recipient || !message) return;
 
-    let peer
+    let peer;
 
     // Get address from name
     try {
-      fromBech32(recipient)
-      peer = recipient
+      fromBech32(recipient);
+      peer = recipient;
     } catch {
       try {
-        if (!client?.cosmWasmClient) await client?.connect()
+        if (!client?.cosmWasmClient) await client?.connect();
         const data = await client?.cosmWasmClient.queryContractSmart(
           process.env.NEXT_PUBLIC_NAMES_CONTRACT_ADDRESS!,
           {
             associated_address: {
               name: recipient.replaceAll(
                 /(\.([a-z]{2,24}))(\.([a-z]{2,24}))?/g,
-                '',
+                ""
               ),
             },
-          },
-        )
-        peer = data
+          }
+        );
+        peer = data;
       } catch (e) {
         return toaster.toast({
-          title: 'Recipient address/name invalid',
+          title: "Recipient address/name invalid",
           type: ToastTypes.Error,
           dismissable: true,
-        })
+        });
       }
     }
 
-    let date = new Date()
-    date.setDate(date.getDate() + 7)
-    let padding = 10 * 60 * 1_000_000 * -1 // -10 minutes (clock drift on chain can be higher)
+    const msg = MsgExecuteContract.fromPartial({
+      sender: wallet?.address,
+      contract: COLLECTION_ADDRESS,
+      msg: toUtf8(
+        JSON.stringify({
+          transfer_nft: {
+            recipient: peer,
+            token_id: selectedNft,
+          },
+        })
+      ),
+      funds: [],
+    });
 
-    let expiresAt = (date.getTime() * 1_000_000 + padding).toString()
+    const wasmMsg = {
+      typeUrl: "/cosmwasm.wasm.v1.MsgExecuteContract",
+      value: msg,
+    };
 
-    const msg = messageComposer.createOffer({
-      expiresAt,
-      message,
-      offeredBalances: [],
-      offeredNfts: [
-        {
-          collection: COLLECTION_ADDRESS,
-          token_id: parseInt(selectedNft),
-        },
-      ],
-      wantedNfts: [],
-      peer,
-    })
+    const uuid = uuidv4();
 
-    tx(
-      [
-        {
-          typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
-          value: MsgExecuteContract.fromPartial({
-            sender: wallet.address,
-            msg: toUtf8(
-              JSON.stringify({
-                approve: {
-                  spender: client?.tradeContract,
-                  token_id: selectedNft,
-                },
-              }),
-            ),
-            contract: COLLECTION_ADDRESS,
-          }),
-        },
-        msg,
-      ],
-      {},
-      async () => {
-        const { offers } = await client?.tradeClient.offersBySender({
-          sender: wallet.address,
-        })!
+    await guard.put(
+      uuid,
+      JSON.stringify({
+        nft: selectedNft,
+        message,
+      })
+    );
 
-        const offer = offers.find(
-          (offer) => offer.offered_nfts[0].token_id.toString() === selectedNft,
-        )
-
-        router.push('/success?id=' + offer?.id)
-      },
-    )
-  }, [wallet, client?.tradeClient, selectedNft, recipient, message, tx])
+    tx([wasmMsg], {}, async () => {
+      router.push("/success?id=" + uuid);
+    });
+  }, [wallet, guard, selectedNft, recipient, message, tx]);
 
   return inventory ? (
     <div className="flex flex-col justify-center h-screen max-w-xl mx-8 lg:mx-auto">
@@ -180,5 +156,5 @@ export default function Home() {
     <div className="flex items-center justify-center w-screen h-screen">
       <Spinner className="w-12 h-12 text-white" />
     </div>
-  )
+  );
 }
