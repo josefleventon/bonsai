@@ -2,17 +2,10 @@ import { StargazeClient } from "./core";
 
 import StargazeProvider from "./react/client/StargazeProvider";
 import useStargazeClient from "./react/client/useStargazeClient";
-import useContract from "./react/contract/useContract";
 import useWallet from "./react/wallet/useWallet";
 import useGuard from "./react/guard/useGuard";
 
 // React components
-export {
-  StargazeProvider,
-  useWallet,
-  useStargazeClient,
-  useContract,
-  useGuard,
-};
+export { StargazeProvider, useWallet, useStargazeClient, useGuard };
 
 export { StargazeClient };
