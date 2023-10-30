@@ -1,7 +1,7 @@
 export interface ISocial {
-  name: string
-  href: string
-  icon: string
+  name: string;
+  href: string;
+  icon: string;
 }
 
 const Social = ({ href, icon }: ISocial) => (
@@ -11,6 +11,6 @@ const Social = ({ href, icon }: ISocial) => (
       className="w-6 h-6 opacity-50 cursor-pointer hover:opacity-75"
     />
   </a>
-)
+);
 
-export default Social
+export default Social;

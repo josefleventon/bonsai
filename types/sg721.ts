@@ -8,7 +8,7 @@ import {
   CosmWasmClient,
   ExecuteResult,
   SigningCosmWasmClient,
-} from '@cosmjs/cosmwasm-stargate';
+} from "@cosmjs/cosmwasm-stargate";
 export type Expiration =
   | {
       at_height: number;
@@ -431,7 +431,7 @@ export class Sg721Client extends Sg721QueryClient implements Sg721Interface {
           token_id: tokenId,
         },
       },
-      'auto'
+      "auto"
     );
   };
   sendNft = async ({
@@ -453,7 +453,7 @@ export class Sg721Client extends Sg721QueryClient implements Sg721Interface {
           token_id: tokenId,
         },
       },
-      'auto'
+      "auto"
     );
   };
   approve = async ({
@@ -475,7 +475,7 @@ export class Sg721Client extends Sg721QueryClient implements Sg721Interface {
           token_id: tokenId,
         },
       },
-      'auto'
+      "auto"
     );
   };
   revoke = async ({
@@ -494,7 +494,7 @@ export class Sg721Client extends Sg721QueryClient implements Sg721Interface {
           token_id: tokenId,
         },
       },
-      'auto'
+      "auto"
     );
   };
   approveAll = async ({
@@ -513,7 +513,7 @@ export class Sg721Client extends Sg721QueryClient implements Sg721Interface {
           operator,
         },
       },
-      'auto'
+      "auto"
     );
   };
   revokeAll = async ({
@@ -529,7 +529,7 @@ export class Sg721Client extends Sg721QueryClient implements Sg721Interface {
           operator,
         },
       },
-      'auto'
+      "auto"
     );
   };
   mint = async (): Promise<ExecuteResult> => {
@@ -539,7 +539,7 @@ export class Sg721Client extends Sg721QueryClient implements Sg721Interface {
       {
         mint: {},
       },
-      'auto'
+      "auto"
     );
   };
   burn = async ({ tokenId }: { tokenId: string }): Promise<ExecuteResult> => {
@@ -551,7 +551,7 @@ export class Sg721Client extends Sg721QueryClient implements Sg721Interface {
           token_id: tokenId,
         },
       },
-      'auto'
+      "auto"
     );
   };
 }

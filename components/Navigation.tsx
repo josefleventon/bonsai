@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import Wallet from './Wallet'
+import Link from "next/link";
+import Wallet from "./Wallet";
 
 export default function Navigation() {
   return (
@@ -9,5 +9,5 @@ export default function Navigation() {
       </Link>
       <Wallet />
     </nav>
-  )
+  );
 }

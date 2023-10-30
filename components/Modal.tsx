@@ -1,23 +1,23 @@
-import { Fragment, ReactNode } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { Fragment, ReactNode } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
-type ActionType = 'primary' | 'secondary'
+type ActionType = "primary" | "secondary";
 
 interface Action {
-  type: ActionType
-  name: string
-  action: (val?: any) => void
+  type: ActionType;
+  name: string;
+  action: (val?: any) => void;
 }
 
 const ButtonClassNames =
-  'inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:primary focus:ring-offset-2 ring-offset-firefly sm:text-sm sm:w-auto sm:text-sm'
+  "inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:primary focus:ring-offset-2 ring-offset-firefly sm:text-sm sm:w-auto sm:text-sm";
 
 const ButtonTypeClassNames = {
-  primary: 'border-transparent bg-primary hover:bg-primary-500 sm:ml-3',
+  primary: "border-transparent bg-primary hover:bg-primary-500 sm:ml-3",
   secondary:
-    'mt-3 border-white bg-firefly hover:bg-firefly-600 hover:border-firefly-600 sm:mt-0',
-}
+    "mt-3 border-white bg-firefly hover:bg-firefly-600 hover:border-firefly-600 sm:mt-0",
+};
 
 const ActionButton = ({
   type,
@@ -25,24 +25,24 @@ const ActionButton = ({
   action,
   handleCloseModal,
 }: {
-  type: Action['type']
-  name: Action['name']
-  action: Action['action']
-  handleCloseModal: () => void
+  type: Action["type"];
+  name: Action["name"];
+  action: Action["action"];
+  handleCloseModal: () => void;
 }) => {
   return (
     <button
       type="button"
-      className={ButtonClassNames + ' ' + ButtonTypeClassNames[type]}
+      className={ButtonClassNames + " " + ButtonTypeClassNames[type]}
       onClick={() => {
-        handleCloseModal()
-        action()
+        handleCloseModal();
+        action();
       }}
     >
       {name}
     </button>
-  )
-}
+  );
+};
 
 export function Modal({
   children,
@@ -50,10 +50,10 @@ export function Modal({
   open,
   handleStateChange,
 }: {
-  children: ReactNode
-  actions: Action[]
-  open: boolean
-  handleStateChange: (val: boolean) => void
+  children: ReactNode;
+  actions: Action[];
+  open: boolean;
+  handleStateChange: (val: boolean) => void;
 }) {
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -107,5 +107,5 @@ export function Modal({
         </div>
       </Dialog>
     </Transition.Root>
-  )
+  );
 }

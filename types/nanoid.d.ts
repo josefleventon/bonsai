@@ -1,3 +1,3 @@
-declare module 'nanoid' {
-    export default function nanoid(size?: number): string;
+declare module "nanoid" {
+  export default function nanoid(size?: number): string;
 }

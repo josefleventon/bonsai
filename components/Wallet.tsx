@@ -1,25 +1,25 @@
-import { SyntheticEvent, useCallback } from 'react'
+import { SyntheticEvent, useCallback } from "react";
 
-import copy from 'copy-to-clipboard'
-import { useWallet } from 'client'
-import { useState } from 'react'
-import { microAmountMultiplier } from 'util/constants'
+import copy from "copy-to-clipboard";
+import { useWallet } from "client";
+import { useState } from "react";
+import { microAmountMultiplier } from "util/constants";
 
 import {
   ArrowRightOnRectangleIcon as LogoutIcon,
   CheckIcon,
   ClipboardIcon as CopyIcon,
-} from '@heroicons/react/24/outline'
-import { useRouter } from 'next/router'
+} from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
 
 const Action = ({
   name,
   icon,
   action,
 }: {
-  name: string
-  icon: React.ReactElement<any, any>
-  action: (e?: SyntheticEvent<Element | Event, Event>) => void
+  name: string;
+  icon: React.ReactElement<any, any>;
+  action: (e?: SyntheticEvent<Element | Event, Event>) => void;
 }) => (
   <>
     <a
@@ -31,30 +31,30 @@ const Action = ({
       {icon}
     </a>
   </>
-)
+);
 
 export default function Wallet() {
-  const [copied, setCopied] = useState<boolean>(false)
-  const router = useRouter()
-  const { wallet, connect, disconnect } = useWallet()
+  const [copied, setCopied] = useState<boolean>(false);
+  const router = useRouter();
+  const { wallet, connect, disconnect } = useWallet();
 
   const handleCopy = useCallback(
     (e: SyntheticEvent<Element | Event, Event> | undefined) => {
-      if (!wallet) return
+      if (!wallet) return;
 
-      e?.preventDefault()
+      e?.preventDefault();
 
-      copy(wallet.address)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 3000)
+      copy(wallet.address);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000);
     },
-    [wallet],
-  )
+    [wallet]
+  );
 
   const handleDisconnect = () => {
-    disconnect()
-    router.push('/')
-  }
+    disconnect();
+    router.push("/");
+  };
 
   return wallet ? (
     <div className="flex flex-row items-center justify-between w-56 px-4 py-3 mt-4 mb-4 text-white transition duration-150 ease-in-out border rounded-lg cursor-pointer h-14 lg:mx-3 lg:mb-0 group hover:border-white/50 border-white/10">
@@ -62,13 +62,13 @@ export default function Wallet() {
         <p className="w-full text-xs font-medium truncate">{wallet.name}</p>
         <p className="text-xs font-light">
           {new Intl.NumberFormat(`en-US`, {
-            style: 'currency',
-            currency: 'USD',
+            style: "currency",
+            currency: "USD",
           })
             .format(
-              parseFloat(wallet.balance?.amount || '0') / microAmountMultiplier,
+              parseFloat(wallet.balance?.amount || "0") / microAmountMultiplier
             )
-            .replace('$', '')}{' '}
+            .replace("$", "")}{" "}
           STARS
         </p>
       </div>
@@ -93,5 +93,5 @@ export default function Wallet() {
     >
       Connect
     </button>
-  )
+  );
 }

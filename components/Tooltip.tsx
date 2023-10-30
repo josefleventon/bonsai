@@ -1,22 +1,22 @@
-import { useRef } from 'react'
+import { useRef } from "react";
 
 export default function Tooltip({
   children,
   text,
 }: {
-  children: React.ReactNode
-  text: string
+  children: React.ReactNode;
+  text: string;
 }) {
-  const tipRef = useRef<HTMLDivElement>(null)
+  const tipRef = useRef<HTMLDivElement>(null);
 
   function handleMouseEnter() {
-    tipRef.current!.classList.remove('hidden')
-    tipRef.current!.classList.add('flex')
+    tipRef.current!.classList.remove("hidden");
+    tipRef.current!.classList.add("flex");
   }
 
   function handleMouseLeave() {
-    tipRef.current!.classList.remove('flex')
-    tipRef.current!.classList.add('hidden')
+    tipRef.current!.classList.remove("flex");
+    tipRef.current!.classList.add("hidden");
   }
 
   return (
@@ -35,5 +35,5 @@ export default function Tooltip({
       </div>
       {children}
     </div>
-  )
+  );
 }
