@@ -37,7 +37,6 @@ export const GuardProvider = ({ children }: { children: ReactNode }) => {
       api: GUARD_API,
       wallet: wallet.type as "keplr" | "cosmostation" | "leap",
       // chainId: CHAIN_ID,
-      namespace: "bonsai",
     });
     setGuard(newGuard);
   }, [setGuard, wallet, GUARD_API /*CHAIN_ID*/]);

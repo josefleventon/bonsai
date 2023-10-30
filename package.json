@@ -29,6 +29,7 @@
     "@heroicons/react": "^2.0.7",
     "@stargazezone/types": "^0.9.0",
     "@swiftprotocol/guard": "^0.4.2",
+    "axios": "^1.6.0",
     "chain-registry": "^1.6.1",
     "copy-to-clipboard": "^3.3.2",
     "cosmjs-types": "^0.6.1",

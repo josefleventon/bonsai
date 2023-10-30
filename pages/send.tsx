@@ -3,7 +3,7 @@ import { getInventory, NFT } from "client/query";
 import { MediaView, Spinner } from "components";
 import { useTx } from "contexts/tx";
 import { MsgExecuteContract } from "cosmjs-types/cosmwasm/wasm/v1/tx";
-import { fromBech32, toUtf8 } from "cosmwasm";
+import { fromBech32, toBech32, toUtf8 } from "cosmwasm";
 import useToaster, { ToastTypes } from "hooks/useToaster";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
@@ -89,11 +89,19 @@ export default function Home() {
       JSON.stringify({
         nft: selectedNft,
         message,
-      })
+      }),
+      "bonsai"
     );
 
+    const unzippedAddress = fromBech32(peer);
+    const junoAddress = toBech32("juno", unzippedAddress.data);
+
+    await guard.authorize("address", junoAddress);
+
     tx([wasmMsg], {}, async () => {
-      router.push("/success?id=" + uuid);
+      router.push(
+        `/success?id=${uuid}&sender=${guard.sig?.msg[0].value.signer}`
+      );
     });
   }, [wallet, guard, selectedNft, recipient, message, tx]);
 

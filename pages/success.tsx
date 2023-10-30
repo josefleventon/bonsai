@@ -1,13 +1,13 @@
-import { CheckIcon, ClipboardIcon } from '@heroicons/react/24/outline'
-import copy from 'copy-to-clipboard'
-import { useRouter } from 'next/router'
-import { useState } from 'react'
-import { BASE_URL } from 'util/constants'
+import { CheckIcon, ClipboardIcon } from "@heroicons/react/24/outline";
+import copy from "copy-to-clipboard";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { BASE_URL } from "util/constants";
 
 export default function Success() {
-  const [copied, setCopied] = useState<boolean>(false)
-  const router = useRouter()
-  const { id } = router.query
+  const [copied, setCopied] = useState<boolean>(false);
+  const router = useRouter();
+  const { id, sender } = router.query;
   return (
     <div className="flex flex-col justify-center h-screen max-w-xl mx-4 lg:mx-auto">
       <p className="mb-2 text-lg font-medium text-center">
@@ -28,15 +28,15 @@ export default function Success() {
               id="link"
               disabled
               className="block w-full border rounded-none rounded-l-md border-white py-1.5 pl-4 text-white ring-1 ring-inset bg-black sm:text-sm sm:leading-6"
-              value={BASE_URL + '/gift?id=' + id}
+              value={BASE_URL + `/gift?id=${id}&sender=${sender}`}
             />
           </div>
           <button
             type="button"
             onClick={() => {
-              copy(BASE_URL + '/gift?id=' + id)
-              setCopied(true)
-              setTimeout(() => setCopied(false), 3000)
+              copy(BASE_URL + `/gift?id=${id}&sender=${sender}`);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 3000);
             }}
             className="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-gray-300 hover:bg-white/10"
           >
@@ -51,10 +51,10 @@ export default function Success() {
                 aria-hidden="true"
               />
             )}
-            {copied ? 'Copied!' : 'Copy'}
+            {copied ? "Copied!" : "Copy"}
           </button>
         </div>
       </div>
     </div>
-  )
+  );
 }
