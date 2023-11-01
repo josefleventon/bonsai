@@ -106,7 +106,7 @@ export default function Home() {
   }, [wallet, guard, selectedNft, recipient, message, tx]);
 
   return inventory ? (
-    <div className="flex flex-col justify-center h-screen max-w-xl mx-8 lg:mx-auto">
+    <div className="flex flex-col justify-center max-w-xl min-h-screen mx-8 lg:mx-auto">
       <p className="text-3xl font-bold text-center text-white">Send a flower</p>
       <div className="mt-4">
         <p className="text-sm font-medium mb-0.5 text-white">
@@ -124,7 +124,7 @@ export default function Home() {
       </div>
       <div className="mt-2">
         <p className="text-sm font-medium mb-0.5 text-white">Choose a flower</p>
-        <div className="grid grid-cols-3 gap-4 p-4 border rounded-md border-white/25">
+        <div className="grid grid-cols-3 gap-4 p-4 border rounded-md border-white/25 max-h-[50vh] overflow-scroll">
           {inventory.map((nft) => (
             <MediaView
               key={nft.tokenId}
