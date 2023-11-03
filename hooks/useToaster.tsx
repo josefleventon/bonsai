@@ -30,23 +30,35 @@ function customToast(
   { actions, title, type, message, dismissable }: ToastPayload,
   options?: ToastOptions
 ): any {
-  let Icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+  let Icon: JSX.Element;
 
   switch (type) {
     case ToastTypes.Success: {
-      Icon = CheckCircleIcon;
+      Icon = (
+        <CheckCircleIcon className="w-6 h-6 text-white" aria-hidden="true" />
+      );
       break;
     }
     case ToastTypes.Error: {
-      Icon = ExclamationCircleIcon;
+      Icon = (
+        <ExclamationCircleIcon
+          className="w-6 h-6 text-white"
+          aria-hidden="true"
+        />
+      );
       break;
     }
     case ToastTypes.Pending: {
-      Icon = Spinner;
+      Icon = <Spinner className="w-6 h-6 text-white" aria-hidden="true" />;
       break;
     }
     case ToastTypes.Warning: {
-      Icon = ExclamationTriangleIcon;
+      Icon = (
+        <ExclamationTriangleIcon
+          className="w-6 h-6 text-white"
+          aria-hidden="true"
+        />
+      );
       break;
     }
   }
@@ -65,9 +77,7 @@ function customToast(
         )}
       >
         <div className="flex items-start">
-          <div className="flex-shrink-0">
-            <Icon className="w-6 h-6 text-white" aria-hidden="true" />
-          </div>
+          <div className="flex-shrink-0">{Icon}</div>
 
           <div className="ml-3 w-0 flex-1 pt-0.5">
             <p className="text-sm font-medium text-white">{title}</p>
